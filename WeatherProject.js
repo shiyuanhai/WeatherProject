@@ -6,12 +6,18 @@ import React, {
   TextInput,
   Image
 } from 'react-native';
+import Forecast from './Forecast';
 
 class WeatherProject extends Component{
   constructor(props){
     super(props);
     this.state = {
       zip: '',
+      forecast: {
+        main: 'clouds',
+        description: 'few clouds',
+        temp: 45.7,
+      },
     };
     this._handleTextChange = this._handleTextChange.bind(this);
   }
@@ -28,6 +34,13 @@ class WeatherProject extends Component{
         <Text style={styles.welcome}>
         You input {this.state.zip}.
         </Text>
+        <Text style={styles.welcome}>
+        123
+        </Text>
+        <Forecast
+          main={this.state.forecast.main}
+          description={this.state.forecast.description}
+          temp={this.state.forecast.temp}/>
         <TextInput style={styles.input} onChangeText={this._handleTextChange} autoFocus={true} />
       </View>
     );
@@ -39,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#4D4D4D',
   },
   welcome: {
     fontSize: 20,
