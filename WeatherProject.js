@@ -4,6 +4,7 @@ import React, {
   Text,
   View,
   TextInput,
+  TouchableHighlight,
   Image
 } from 'react-native';
 import Forecast from './Forecast';
@@ -12,10 +13,13 @@ class WeatherProject extends Component{
   constructor(props){
     super(props);
     this.state = {
-      zip: '',
+      zip: '95014',
       forecast: null,
     };
     this._handleTextChange = this._handleTextChange.bind(this);
+    this._updateBtnPress = this._updateBtnPress.bind(this);
+
+    this._getWeather(this.state.zip);
   }
 
   _handleTextChange(event) {
@@ -23,7 +27,11 @@ class WeatherProject extends Component{
     this.setState({
       zip: zip,
     });
-    fetch('http://api.openweathermap.org/data/2.5/weather?q=' + zip + '&appid=useyourownapikey')
+    this._getWeather(zip);
+  }
+
+  _getWeather(zip){
+    fetch('http://api.openweathermap.org/data/2.5/weather?q=' + zip + '&appid=yourappid')
       .then((response) => response.json())
       .then((responseJSON) => {
         console.log(responseJSON);
@@ -34,10 +42,14 @@ class WeatherProject extends Component{
             temp: Math.round(responseJSON.main.temp * 9 / 5 - 459.67),
           }
         });
-      })
-      .catch((error) => {
-        console.warn(error);
-      });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  }
+
+  _updateBtnPress(event){
+    this._getWeather(this.state.zip);
   }
 
   render() {
@@ -55,6 +67,13 @@ class WeatherProject extends Component{
         </Text>
         {content}
         <TextInput style={styles.input} returnKeyType = {"go"} onSubmitEditing={this._handleTextChange} autoFocus={true} />
+        <TouchableHighlight
+          onPress={this._updateBtnPress}
+          style={styles.touchable}>
+          <View style={styles.button}>
+            <Text sytle={styles.buttonText}>Update</Text>
+          </View>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -76,6 +95,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     borderWidth: 2,
     height: 40,
+  },
+  touchable: {
+    borderRadius: 100,
+  },
+  button: {
+    backgroundColor: '#8b9dc3',
+    borderRadius: 100,
+    width: 80,
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
   },
 });
 
